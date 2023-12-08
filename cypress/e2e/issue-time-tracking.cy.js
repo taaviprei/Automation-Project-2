@@ -66,7 +66,7 @@ const deleteEstimate = () => IssueModal.getIssueDetailModal().within(() => {
         originalEstimate().children().should('have.value', '');
     });
 
-    it.only('Log time, remove logged time', () => {
+    it('Log time, remove logged time', () => {
 
         //Create a new issue to test adding a new time estimation (existing issues already had time estimations).
         cy.visit('/');
@@ -107,7 +107,7 @@ const deleteEstimate = () => IssueModal.getIssueDetailModal().within(() => {
                 .parent().click()
                 .wait(1000)
             cy.contains('button', 'Done').click();
-            cy.contains('No time logged').should('not.exist');
+            cy.contains('No time').should('not.exist');
             cy.contains('remaining').should('exist');
             cy.contains('Time Tracking').next()
                 .click();
