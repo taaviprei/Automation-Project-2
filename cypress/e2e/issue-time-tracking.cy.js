@@ -91,8 +91,38 @@ const deleteEstimate = () => IssueModal.getIssueDetailModal().within(() => {
         });
 
         editEstimate(10);
-        getFirstIssue();
-        cy.contains('Time Tracking').next().click();
-        cy.contains('[data-testid="modal:tracking"]').should('exist');
+        getFirstIssue()
+            cy.contains('Time Tracking').next()
+                .click();
+            cy.get('[data-testid="modal:tracking"]').should('exist');
+            cy.contains('Time spent (hours)').next()
+                .click()
+                .clear()
+                .type(2);
+            cy.contains('Time remaining (hours)').next()
+                .click()
+                .clear()
+                .type(5)
+                .wait(1000)
+                .parent().click()
+                .wait(1000)
+            cy.contains('button', 'Done').click();
+            cy.contains('No time logged').should('not.exist');
+            cy.contains('remaining').should('exist');
+            cy.contains('Time Tracking').next()
+                .click();
+            cy.get('[data-testid="modal:tracking"]').should('exist');
+            cy.contains('Time spent (hours)').next()
+                .click()
+                .clear()
+            cy.contains('Time remaining (hours)').next()
+                .click()
+                .clear()
+                .wait(1000)
+                .parent().click()
+                .wait(1000)
+            cy.contains('button', 'Done').click();
+            cy.contains('remaining').should('not.exist');
+            cy.contains('No time logged').should('exist');
     });
 });
