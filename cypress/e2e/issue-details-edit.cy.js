@@ -61,5 +61,40 @@ describe('Issue details editing', () => {
     });
   });
 
+  it('Should check "Priority" dropdown', () => {
+    const expectedLength = 5;
+    let priorityArray = [];
+
+    cy.get('[data-testid="select:priority"]').invoke('text').then ((defaultPriority) => {
+      priorityArray.push(defaultPriority);
+      cy.log(defaultPriority);
+    });
+
+    cy.get('[data-testid="select:priority"]').click();
+
+    cy.get('[data-select-option-value]').then(($options) => {
+      const itemCount = Cypress.$($options).length;
+
+      for (let index = 0; index < itemCount; index++) {
+        cy.get('[data-select-option-value]')
+          .eq(index).invoke('text').then((extractedPriority) => {
+            priorityArray.push(extractedPriority);
+
+            if (index == (itemCount - 1)) {
+              cy.log("TOTAL calculated array length: " + priorityArray.length);
+              expect(priorityArray.length).to.be.eq(expectedLength);
+            }
+          });
+      };
+    });
+  });
+
+  it('Check that reporters name has only characters in it', () => {
+    getIssueDetailsModal().within(() => {
+      cy.get('[data-testid="select:reporter"]').invoke('text')
+      .should('match', /^[A-Za-z ]*$/);
+    });     
+  });
+
   const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
 });

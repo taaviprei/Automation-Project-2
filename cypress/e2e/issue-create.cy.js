@@ -180,4 +180,24 @@ describe('Issue create', () => {
       cy.get('[data-testid="form-field:title"]').should('contain', 'This field is required');
     });
   });
+
+  it('Verify that the application is removing unnecessary spaces', () => {
+    const title = '  Hello World  ';
+
+    cy.get('[data-testid="modal:issue-create"]').within(() => {
+      cy.get('.ql-editor').type('TEST_DESCRIPTION');
+      cy.get('input[name="title"]').debounced('type', title);
+      cy.get('button[type="submit"]').click();
+    });
+
+    cy.get('[data-testid="modal:issue-create"]').should('not.exist');
+    cy.contains('Issue has been successfully created.').should('be.visible');
+    cy.reload();
+    cy.contains('Issue has been successfully created.').should('not.exist');
+
+    cy.get('[data-testid="board-list:backlog').within(() => {
+      cy.get('[data-testid="list-issue"]').first().find('p')
+        .contains(title.trim());
+    });
+  });
 });
